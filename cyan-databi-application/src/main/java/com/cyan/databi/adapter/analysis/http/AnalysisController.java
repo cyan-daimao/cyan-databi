@@ -6,7 +6,7 @@ import com.cyan.databi.adapter.analysis.http.dto.ChartDataDTO;
 import com.cyan.databi.application.analysis.AnalysisService;
 import com.cyan.databi.application.analysis.bo.ChartDataBO;
 import com.cyan.databi.application.analysis.cmd.AnalysisCmd;
-import com.cyan.employee.login.holder.UserHolder;
+import com.cyan.employee.login.filter.UserContextHolder;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,7 +31,7 @@ public class AnalysisController {
      */
     @PostMapping("/execute")
     public Response<ChartDataDTO> execute(@RequestBody @Valid AnalysisCmd cmd) {
-        ChartDataBO bo = analysisService.execute(cmd, UserHolder.getUserCode());
+        ChartDataBO bo = analysisService.execute(cmd, UserContextHolder.getCurrentEmployee().getPassport());
         ChartDataDTO dto = AnalysisAdapterConvert.INSTANCE.toChartDataDTO(bo);
         return Response.success(dto);
     }

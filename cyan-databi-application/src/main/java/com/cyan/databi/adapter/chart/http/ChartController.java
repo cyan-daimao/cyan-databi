@@ -14,7 +14,7 @@ import com.cyan.databi.application.chart.bo.ChartBO;
 import com.cyan.databi.application.chart.cmd.ChartCmd;
 import com.cyan.databi.domain.chart.query.ChartListQuery;
 import com.cyan.databi.domain.chart.query.ChartPageQuery;
-import com.cyan.employee.login.holder.UserHolder;
+import com.cyan.employee.login.filter.UserContextHolder;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,7 +52,7 @@ public class ChartController {
         ChartPageQuery query = new ChartPageQuery()
                 .setName(name)
                 .setDatasetId(datasetId)
-                .setCreatedBy(UserHolder.getUserCode());
+                .setCreatedBy(UserContextHolder.getCurrentEmployee().getPassport());
         query.setCurrent(current).setSize(size);
         Page<ChartBO> page = chartService.page(query);
         List<ChartDTO> data = Optional.ofNullable(page.getData()).orElse(List.of())
@@ -70,7 +70,7 @@ public class ChartController {
         ChartListQuery query = new ChartListQuery()
                 .setName(name)
                 .setDatasetId(datasetId)
-                .setCreatedBy(UserHolder.getUserCode());
+                .setCreatedBy(UserContextHolder.getCurrentEmployee().getPassport());
         List<ChartBO> bos = chartService.list(query);
         List<ChartDTO> dtos = Optional.ofNullable(bos).orElse(List.of())
                 .stream().map(ChartAdapterConvert.INSTANCE::toChartDTO).toList();
@@ -92,7 +92,7 @@ public class ChartController {
      */
     @PostMapping
     public Response<ChartDTO> save(@RequestBody @Valid ChartCmd cmd) {
-        ChartBO bo = chartService.save(cmd, UserHolder.getUserCode());
+        ChartBO bo = chartService.save(cmd, UserContextHolder.getCurrentEmployee().getPassport());
         ChartDTO dto = ChartAdapterConvert.INSTANCE.toChartDTO(bo);
         return Response.success(dto);
     }
@@ -130,7 +130,7 @@ public class ChartController {
                 .setFilters(chart.getFilters())
                 .setOrders(chart.getOrders())
                 .setLimitValue(chart.getLimitValue());
-        ChartDataBO bo = analysisService.execute(cmd, UserHolder.getUserCode());
+        ChartDataBO bo = analysisService.execute(cmd, UserContextHolder.getCurrentEmployee().getPassport());
         ChartDataDTO dto = AnalysisAdapterConvert.INSTANCE.toChartDataDTO(bo);
         return Response.success(dto);
     }

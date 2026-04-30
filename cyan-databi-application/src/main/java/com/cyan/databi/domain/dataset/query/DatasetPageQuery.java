@@ -1,6 +1,6 @@
 package com.cyan.databi.domain.dataset.query;
 
-import com.cyan.arch.common.api.PageQuery;
+import com.cyan.arch.common.api.Pagination;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -18,7 +18,7 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class DatasetPageQuery extends PageQuery {
+public class DatasetPageQuery extends Pagination {
 
     /**
      * 数据集名称（模糊查询）

@@ -9,7 +9,7 @@ import com.cyan.databi.application.dashboard.bo.DashboardBO;
 import com.cyan.databi.application.dashboard.cmd.DashboardCmd;
 import com.cyan.databi.domain.dashboard.query.DashboardListQuery;
 import com.cyan.databi.domain.dashboard.query.DashboardPageQuery;
-import com.cyan.employee.login.holder.UserHolder;
+import com.cyan.employee.login.filter.UserContextHolder;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,7 +43,7 @@ public class DashboardController {
         size = size == null ? 10L : size;
         DashboardPageQuery query = new DashboardPageQuery()
                 .setName(name)
-                .setCreatedBy(UserHolder.getUserCode());
+                .setCreatedBy(UserContextHolder.getCurrentEmployee().getPassport());
         query.setCurrent(current).setSize(size);
         Page<DashboardBO> page = dashboardService.page(query);
         List<DashboardDTO> data = Optional.ofNullable(page.getData()).orElse(List.of())
@@ -59,7 +59,7 @@ public class DashboardController {
     public Response<List<DashboardDTO>> list(@RequestParam(required = false) String name) {
         DashboardListQuery query = new DashboardListQuery()
                 .setName(name)
-                .setCreatedBy(UserHolder.getUserCode());
+                .setCreatedBy(UserContextHolder.getCurrentEmployee().getPassport());
         List<DashboardBO> bos = dashboardService.list(query);
         List<DashboardDTO> dtos = Optional.ofNullable(bos).orElse(List.of())
                 .stream().map(DashboardAdapterConvert.INSTANCE::toDashboardDTO).toList();
@@ -81,7 +81,7 @@ public class DashboardController {
      */
     @PostMapping
     public Response<DashboardDTO> save(@RequestBody @Valid DashboardCmd cmd) {
-        DashboardBO bo = dashboardService.save(cmd, UserHolder.getUserCode());
+        DashboardBO bo = dashboardService.save(cmd, UserContextHolder.getCurrentEmployee().getPassport());
         DashboardDTO dto = DashboardAdapterConvert.INSTANCE.toDashboardDTO(bo);
         return Response.success(dto);
     }

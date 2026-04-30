@@ -9,7 +9,7 @@ import com.cyan.databi.application.dataset.bo.DatasetBO;
 import com.cyan.databi.application.dataset.cmd.DatasetCmd;
 import com.cyan.databi.domain.dataset.query.DatasetListQuery;
 import com.cyan.databi.domain.dataset.query.DatasetPageQuery;
-import com.cyan.employee.login.holder.UserHolder;
+import com.cyan.employee.login.filter.UserContextHolder;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,7 +43,7 @@ public class DatasetController {
         size = size == null ? 10L : size;
         DatasetPageQuery query = new DatasetPageQuery()
                 .setName(name)
-                .setCreatedBy(UserHolder.getUserCode());
+                .setCreatedBy(UserContextHolder.getCurrentEmployee().getPassport());
         query.setCurrent(current).setSize(size);
         Page<DatasetBO> page = datasetService.page(query);
         List<DatasetDTO> data = Optional.ofNullable(page.getData()).orElse(List.of())
@@ -59,7 +59,7 @@ public class DatasetController {
     public Response<List<DatasetDTO>> list(@RequestParam(required = false) String name) {
         DatasetListQuery query = new DatasetListQuery()
                 .setName(name)
-                .setCreatedBy(UserHolder.getUserCode());
+                .setCreatedBy(UserContextHolder.getCurrentEmployee().getPassport());
         List<DatasetBO> bos = datasetService.list(query);
         List<DatasetDTO> dtos = Optional.ofNullable(bos).orElse(List.of())
                 .stream().map(DatasetAdapterConvert.INSTANCE::toDatasetDTO).toList();
@@ -81,7 +81,7 @@ public class DatasetController {
      */
     @PostMapping
     public Response<DatasetDTO> save(@RequestBody @Valid DatasetCmd cmd) {
-        DatasetBO bo = datasetService.save(cmd, UserHolder.getUserCode());
+        DatasetBO bo = datasetService.save(cmd, UserContextHolder.getCurrentEmployee().getPassport());
         DatasetDTO dto = DatasetAdapterConvert.INSTANCE.toDatasetDTO(bo);
         return Response.success(dto);
     }

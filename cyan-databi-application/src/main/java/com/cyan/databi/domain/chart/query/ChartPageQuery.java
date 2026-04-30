@@ -1,6 +1,6 @@
 package com.cyan.databi.domain.chart.query;
 
-import com.cyan.arch.common.api.PageQuery;
+import com.cyan.arch.common.api.Pagination;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -18,7 +18,7 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class ChartPageQuery extends PageQuery {
+public class ChartPageQuery extends Pagination {
 
     /**
      * 图表名称（模糊查询）
