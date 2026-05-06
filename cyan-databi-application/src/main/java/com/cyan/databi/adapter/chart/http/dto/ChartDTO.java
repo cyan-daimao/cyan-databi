@@ -1,6 +1,7 @@
 package com.cyan.databi.adapter.chart.http.dto;
 
 import com.cyan.databi.domain.chart.valobj.*;
+import com.cyan.databi.enums.AnalysisType;
 import com.cyan.databi.enums.ChartType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -41,6 +42,16 @@ public class ChartDTO {
      * 关联数据集ID
      */
     private String datasetId;
+
+    /**
+     * 分析类型
+     */
+    private AnalysisType analysisType;
+
+    /**
+     * 指标分析DSL
+     */
+    private MetricBiAnalysisCmd metricAnalysisCmd;
 
     /**
      * 图表类型

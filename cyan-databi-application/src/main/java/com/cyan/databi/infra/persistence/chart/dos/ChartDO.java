@@ -50,6 +50,18 @@ public class ChartDO {
     private Long datasetId;
 
     /**
+     * 分析类型
+     */
+    @TableField(value = "analysis_type")
+    private String analysisType;
+
+    /**
+     * 指标分析DSL JSON
+     */
+    @TableField(value = "metric_analysis_cmd")
+    private String metricAnalysisCmd;
+
+    /**
      * 图表类型
      */
     @TableField(value = "chart_type")

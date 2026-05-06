@@ -2,7 +2,11 @@ package com.cyan.databi.application.chart.impl;
 
 import com.cyan.arch.common.api.Assert;
 import com.cyan.arch.common.api.Page;
+import com.cyan.arch.common.api.Response;
 import com.cyan.arch.common.api.SilentException;
+import com.cyan.databi.application.analysis.AnalysisService;
+import com.cyan.databi.application.analysis.bo.ChartDataBO;
+import com.cyan.databi.application.analysis.cmd.AnalysisCmd;
 import com.cyan.databi.application.chart.ChartService;
 import com.cyan.databi.application.chart.bo.ChartBO;
 import com.cyan.databi.application.chart.cmd.ChartCmd;
@@ -11,6 +15,9 @@ import com.cyan.databi.domain.chart.Chart;
 import com.cyan.databi.domain.chart.query.ChartListQuery;
 import com.cyan.databi.domain.chart.query.ChartPageQuery;
 import com.cyan.databi.domain.chart.repository.ChartRepository;
+import com.cyan.databi.enums.AnalysisType;
+import com.cyan.databi.infra.client.MetricBiAnalysisClient;
+import com.cyan.databi.infra.client.dto.MetricBiChartDataDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,9 +34,15 @@ import java.util.Optional;
 public class ChartServiceImpl implements ChartService {
 
     private final ChartRepository chartRepository;
+    private final AnalysisService analysisService;
+    private final MetricBiAnalysisClient metricBiAnalysisClient;
 
-    public ChartServiceImpl(ChartRepository chartRepository) {
+    public ChartServiceImpl(ChartRepository chartRepository,
+                            AnalysisService analysisService,
+                            MetricBiAnalysisClient metricBiAnalysisClient) {
         this.chartRepository = chartRepository;
+        this.analysisService = analysisService;
+        this.metricBiAnalysisClient = metricBiAnalysisClient;
     }
 
     /**
@@ -98,5 +111,65 @@ public class ChartServiceImpl implements ChartService {
         Chart existing = chartRepository.findById(id);
         Assert.notNull(existing, new SilentException("图表不存在"));
         existing.delete(chartRepository);
+    }
+
+    /**
+     * 执行图表分析
+     */
+    @Override
+    public ChartDataBO executeChart(String chartId, String executor) {
+        Chart chart = chartRepository.findById(chartId);
+        Assert.notNull(chart, new SilentException("图表不存在"));
+
+        if (chart.getActualAnalysisType() == AnalysisType.METRICS) {
+            Response<MetricBiChartDataDTO> response = metricBiAnalysisClient.execute(chart.getMetricAnalysisCmd());
+            MetricBiChartDataDTO dto = response.getData();
+            if (dto == null) {
+                return new ChartDataBO()
+                        .setStatus("FAILED")
+                        .setErrorMessage(response.getMessage());
+            }
+            return new ChartDataBO()
+                    .setStatus(dto.getStatus())
+                    .setCostTimeMs(dto.getCostTimeMs())
+                    .setColumns(dto.getColumns())
+                    .setRows(dto.getRows())
+                    .setSql(dto.getSql())
+                    .setErrorMessage(dto.getErrorMessage());
+        }
+
+        AnalysisCmd cmd = buildAnalysisCmd(chart);
+        return analysisService.execute(cmd, executor);
+    }
+
+    /**
+     * 预览图表SQL
+     */
+    @Override
+    public String previewChartSql(String chartId) {
+        Chart chart = chartRepository.findById(chartId);
+        Assert.notNull(chart, new SilentException("图表不存在"));
+
+        if (chart.getActualAnalysisType() == AnalysisType.METRICS) {
+            Response<String> response = metricBiAnalysisClient.previewSql(chart.getMetricAnalysisCmd());
+            return response.getData();
+        }
+
+        AnalysisCmd cmd = buildAnalysisCmd(chart);
+        return analysisService.previewSql(cmd);
+    }
+
+    /**
+     * 构建分析命令
+     */
+    private AnalysisCmd buildAnalysisCmd(Chart chart) {
+        return new AnalysisCmd()
+                .setDatasetId(chart.getDatasetId())
+                .setChartType(chart.getChartType())
+                .setDimensions(chart.getDimensions())
+                .setMetrics(chart.getMetrics())
+                .setFilters(chart.getFilters())
+                .setOrders(chart.getOrders())
+                .setLimitValue(chart.getLimitValue());
     }
 }

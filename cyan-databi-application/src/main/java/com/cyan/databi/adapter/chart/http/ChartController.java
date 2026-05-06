@@ -6,9 +6,7 @@ import com.cyan.databi.adapter.analysis.http.convert.AnalysisAdapterConvert;
 import com.cyan.databi.adapter.analysis.http.dto.ChartDataDTO;
 import com.cyan.databi.adapter.chart.http.convert.ChartAdapterConvert;
 import com.cyan.databi.adapter.chart.http.dto.ChartDTO;
-import com.cyan.databi.application.analysis.AnalysisService;
 import com.cyan.databi.application.analysis.bo.ChartDataBO;
-import com.cyan.databi.application.analysis.cmd.AnalysisCmd;
 import com.cyan.databi.application.chart.ChartService;
 import com.cyan.databi.application.chart.bo.ChartBO;
 import com.cyan.databi.application.chart.cmd.ChartCmd;
@@ -32,11 +30,9 @@ import java.util.Optional;
 public class ChartController {
 
     private final ChartService chartService;
-    private final AnalysisService analysisService;
 
-    public ChartController(ChartService chartService, AnalysisService analysisService) {
+    public ChartController(ChartService chartService) {
         this.chartService = chartService;
-        this.analysisService = analysisService;
     }
 
     /**
@@ -91,6 +87,7 @@ public class ChartController {
      * 保存图表
      */
     @PostMapping
+    // API: ready
     public Response<ChartDTO> save(@RequestBody @Valid ChartCmd cmd) {
         ChartBO bo = chartService.save(cmd, UserContextHolder.getCurrentEmployee().getPassport());
         ChartDTO dto = ChartAdapterConvert.INSTANCE.toChartDTO(bo);
@@ -101,6 +98,7 @@ public class ChartController {
      * 更新图表
      */
     @PutMapping("/{id}")
+    // API: ready
     public Response<ChartDTO> update(@PathVariable String id, @RequestBody @Valid ChartCmd cmd) {
         ChartBO bo = chartService.update(id, cmd);
         ChartDTO dto = ChartAdapterConvert.INSTANCE.toChartDTO(bo);
@@ -120,17 +118,9 @@ public class ChartController {
      * 执行图表分析
      */
     @PostMapping("/{id}/execute")
+    // API: ready
     public Response<ChartDataDTO> execute(@PathVariable String id) {
-        ChartBO chart = chartService.findById(id);
-        AnalysisCmd cmd = new AnalysisCmd()
-                .setDatasetId(chart.getDatasetId())
-                .setChartType(chart.getChartType())
-                .setDimensions(chart.getDimensions())
-                .setMetrics(chart.getMetrics())
-                .setFilters(chart.getFilters())
-                .setOrders(chart.getOrders())
-                .setLimitValue(chart.getLimitValue());
-        ChartDataBO bo = analysisService.execute(cmd, UserContextHolder.getCurrentEmployee().getPassport());
+        ChartDataBO bo = chartService.executeChart(id, UserContextHolder.getCurrentEmployee().getPassport());
         ChartDataDTO dto = AnalysisAdapterConvert.INSTANCE.toChartDataDTO(bo);
         return Response.success(dto);
     }
@@ -139,17 +129,9 @@ public class ChartController {
      * 预览图表SQL
      */
     @GetMapping("/{id}/preview-sql")
+    // API: ready
     public Response<String> previewSql(@PathVariable String id) {
-        ChartBO chart = chartService.findById(id);
-        AnalysisCmd cmd = new AnalysisCmd()
-                .setDatasetId(chart.getDatasetId())
-                .setChartType(chart.getChartType())
-                .setDimensions(chart.getDimensions())
-                .setMetrics(chart.getMetrics())
-                .setFilters(chart.getFilters())
-                .setOrders(chart.getOrders())
-                .setLimitValue(chart.getLimitValue());
-        String sql = analysisService.previewSql(cmd);
+        String sql = chartService.previewChartSql(id);
         return Response.success(sql);
     }
 }

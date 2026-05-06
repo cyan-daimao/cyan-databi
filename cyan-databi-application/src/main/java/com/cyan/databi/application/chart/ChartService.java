@@ -1,6 +1,7 @@
 package com.cyan.databi.application.chart;
 
 import com.cyan.arch.common.api.Page;
+import com.cyan.databi.application.analysis.bo.ChartDataBO;
 import com.cyan.databi.application.chart.bo.ChartBO;
 import com.cyan.databi.application.chart.cmd.ChartCmd;
 import com.cyan.databi.domain.chart.query.ChartListQuery;
@@ -45,4 +46,21 @@ public interface ChartService {
      * 删除图表
      */
     void delete(String id);
+
+    /**
+     * 执行图表分析
+     *
+     * @param chartId 图表ID
+     * @param executor 执行人
+     * @return 图表数据
+     */
+    ChartDataBO executeChart(String chartId, String executor);
+
+    /**
+     * 预览图表SQL
+     *
+     * @param chartId 图表ID
+     * @return 生成的SQL
+     */
+    String previewChartSql(String chartId);
 }
