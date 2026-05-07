@@ -18,9 +18,9 @@ import lombok.experimental.Accessors;
 public class MetricRef {
 
     /**
-     * 指标平台指标ID
+     * 指标平台指标编码（可读标识）
      */
-    private String metricId;
+    private String metricCode;
 
     /**
      * 前端显示别名

@@ -18,14 +18,14 @@ import lombok.experimental.Accessors;
 public class OrderRef {
 
     /**
-     * 指标ID（可选）
+     * 指标编码（可选）
      */
-    private String metricId;
+    private String metricCode;
 
     /**
-     * 维度ID（可选）
+     * 维度编码（可选）
      */
-    private String dimId;
+    private String dimCode;
 
     /**
      * 排序方向：ASC / DESC

@@ -18,9 +18,9 @@ import lombok.experimental.Accessors;
 public class DimensionRef {
 
     /**
-     * 公共维度ID
+     * 公共维度编码（可读标识）
      */
-    private String dimId;
+    private String dimCode;
 
     /**
      * 前端显示别名

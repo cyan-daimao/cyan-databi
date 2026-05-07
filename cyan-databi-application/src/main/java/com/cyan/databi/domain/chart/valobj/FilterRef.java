@@ -20,14 +20,14 @@ import java.util.List;
 public class FilterRef {
 
     /**
-     * 指标ID（可选，默认全局过滤）
+     * 指标编码（可选，默认全局过滤）
      */
-    private String metricId;
+    private String metricCode;
 
     /**
-     * 维度ID
+     * 维度编码
      */
-    private String dimId;
+    private String dimCode;
 
     /**
      * 操作符
