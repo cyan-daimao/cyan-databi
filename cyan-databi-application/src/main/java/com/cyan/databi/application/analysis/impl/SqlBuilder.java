@@ -1,7 +1,15 @@
 package com.cyan.databi.application.analysis.impl;
 
 import com.cyan.databi.application.analysis.cmd.AnalysisCmd;
-import com.cyan.databi.domain.chart.valobj.*;
+import com.cyan.datametric.client.dto.MetricBiAnalysisCmd;
+import com.cyan.datametric.client.dto.MetricBiAnalysisCmd.MetricRef;
+import com.cyan.datametric.client.dto.MetricBiAnalysisCmd.DimensionRef;
+import com.cyan.datametric.client.dto.MetricBiAnalysisCmd.FilterRef;
+import com.cyan.datametric.client.dto.MetricBiAnalysisCmd.OrderRef;
+import com.cyan.databi.domain.chart.valobj.DimensionConfigValObj;
+import com.cyan.databi.domain.chart.valobj.MetricConfigValObj;
+import com.cyan.databi.domain.chart.valobj.FilterConfigValObj;
+import com.cyan.databi.domain.chart.valobj.OrderConfigValObj;
 import com.cyan.databi.domain.dataset.Dataset;
 import com.cyan.databi.enums.AggregateType;
 import com.cyan.databi.enums.DatasetSourceType;

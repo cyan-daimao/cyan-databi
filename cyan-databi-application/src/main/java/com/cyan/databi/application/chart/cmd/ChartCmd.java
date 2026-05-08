@@ -1,6 +1,14 @@
 package com.cyan.databi.application.chart.cmd;
 
-import com.cyan.databi.domain.chart.valobj.*;
+import com.cyan.datametric.client.dto.MetricBiAnalysisCmd;
+import com.cyan.datametric.client.dto.MetricBiAnalysisCmd.MetricRef;
+import com.cyan.datametric.client.dto.MetricBiAnalysisCmd.DimensionRef;
+import com.cyan.datametric.client.dto.MetricBiAnalysisCmd.FilterRef;
+import com.cyan.datametric.client.dto.MetricBiAnalysisCmd.OrderRef;
+import com.cyan.databi.domain.chart.valobj.DimensionConfigValObj;
+import com.cyan.databi.domain.chart.valobj.MetricConfigValObj;
+import com.cyan.databi.domain.chart.valobj.FilterConfigValObj;
+import com.cyan.databi.domain.chart.valobj.OrderConfigValObj;
 import com.cyan.databi.enums.AnalysisType;
 import com.cyan.databi.enums.ChartType;
 import jakarta.validation.constraints.NotBlank;
