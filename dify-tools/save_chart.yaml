@@ -1,0 +1,125 @@
+openapi: 3.0.0
+info:
+  title: Save Chart API
+  description: |
+    将分析DSL保存为平台图表，保存后可在图表管理/看板中复用。
+    入参结构与 execute_analysis 相同，额外需要 chartName。
+  version: 1.0.0
+servers:
+  - url: http://10.0.0.2:8085
+    description: cyan-databi 服务
+paths:
+  /rpc/v1/charts:
+    post:
+      operationId: saveChart
+      summary: 保存图表
+      description: |
+        将ChatBI对话中生成的分析配置保存为平台图表。
+        保存成功后返回图表ID，用户可在「图表管理」中查看和编辑。
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - analysisType
+                - chartType
+                - metricAnalysisCmd
+              properties:
+                name:
+                  type: string
+                  description: 图表名称（用户可自定义，建议基于分析内容自动生成）
+                description:
+                  type: string
+                  description: 图表描述（可选）
+                analysisType:
+                  type: string
+                  enum: [METRICS, DATASET]
+                  description: 分析类型（ChatBI统一用 METRICS）
+                chartType:
+                  type: string
+                  enum: [TABLE, BAR, LINE, AREA, PIE, SCATTER, NUMBER]
+                  description: 图表类型
+                metricAnalysisCmd:
+                  type: object
+                  description: |
+                    指标分析DSL（与 execute_analysis 入参结构相同）
+                  properties:
+                    chartType:
+                      type: string
+                    metrics:
+                      type: array
+                      items:
+                        type: object
+                    dimensions:
+                      type: array
+                      items:
+                        type: object
+                    filters:
+                      type: array
+                      items:
+                        type: object
+                    orders:
+                      type: array
+                      items:
+                        type: object
+                    limitValue:
+                      type: integer
+                dimensions:
+                  type: array
+                  description: 图表维度配置（可选，前端展示用）
+                  items:
+                    type: object
+                    properties:
+                      field:
+                        type: string
+                      alias:
+                        type: string
+                metrics:
+                  type: array
+                  description: 图表指标配置（可选，前端展示用）
+                  items:
+                    type: object
+                    properties:
+                      field:
+                        type: string
+                      aggregate:
+                        type: string
+                      alias:
+                        type: string
+                filters:
+                  type: array
+                  description: 图表过滤配置（可选）
+                  items:
+                    type: object
+                orders:
+                  type: array
+                  description: 图表排序配置（可选）
+                  items:
+                    type: object
+                limitValue:
+                  type: integer
+                  description: 限制条数
+      responses:
+        '200':
+          description: 保存成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: 图表ID
+                      name:
+                        type: string
+                        description: 图表名称
