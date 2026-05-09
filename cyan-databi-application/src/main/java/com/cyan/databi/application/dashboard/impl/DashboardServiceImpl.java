@@ -85,6 +85,7 @@ public class DashboardServiceImpl implements DashboardService {
         Assert.notNull(existing, new SilentException("看板不存在"));
         Dashboard dashboard = DashboardAppConvert.INSTANCE.toDashboard(cmd);
         dashboard.setId(id);
+        dashboard.setCreatedBy(existing.getCreatedBy());
         dashboard = dashboard.update(dashboardRepository);
         return DashboardAppConvert.INSTANCE.toDashboardBO(dashboard);
     }

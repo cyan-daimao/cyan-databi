@@ -85,6 +85,7 @@ public class DatasetServiceImpl implements DatasetService {
         Assert.notNull(existing, new SilentException("数据集不存在"));
         Dataset dataset = DatasetAppConvert.INSTANCE.toDataset(cmd);
         dataset.setId(id);
+        dataset.setCreatedBy(existing.getCreatedBy());
         dataset = dataset.update(datasetRepository);
         return DatasetAppConvert.INSTANCE.toDatasetBO(dataset);
     }
