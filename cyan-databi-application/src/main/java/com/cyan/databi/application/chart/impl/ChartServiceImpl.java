@@ -98,6 +98,8 @@ public class ChartServiceImpl implements ChartService {
         Assert.notNull(existing, new SilentException("图表不存在"));
         Chart chart = ChartAppConvert.INSTANCE.toChart(cmd);
         chart.setId(id);
+        // 保留原创建人，防止被覆盖为空
+        chart.setCreatedBy(existing.getCreatedBy());
         chart = chart.update(chartRepository);
         return ChartAppConvert.INSTANCE.toChartBO(chart);
     }
