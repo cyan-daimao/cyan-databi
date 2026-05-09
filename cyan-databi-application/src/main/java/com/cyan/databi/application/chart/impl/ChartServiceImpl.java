@@ -16,8 +16,8 @@ import com.cyan.databi.domain.chart.query.ChartListQuery;
 import com.cyan.databi.domain.chart.query.ChartPageQuery;
 import com.cyan.databi.domain.chart.repository.ChartRepository;
 import com.cyan.databi.enums.AnalysisType;
-import com.cyan.databi.infra.client.MetricBiAnalysisClient;
-import com.cyan.databi.infra.client.dto.MetricBiChartDataDTO;
+import com.cyan.datametric.client.MetricBiAnalysisClient;
+import com.cyan.datametric.client.dto.MetricBiChartDataDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

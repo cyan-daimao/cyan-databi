@@ -3,7 +3,7 @@ package com.cyan.databi.infra.persistence.chart.convert;
 import com.cyan.arch.common.mapstruct.MapstructConvert;
 import com.cyan.arch.common.util.JSON;
 import com.cyan.databi.domain.chart.Chart;
-import com.cyan.databi.domain.chart.valobj.MetricBiAnalysisCmd;
+import com.cyan.datametric.client.dto.MetricBiAnalysisCmd;
 import com.cyan.databi.enums.AnalysisType;
 import com.cyan.databi.infra.persistence.chart.dos.ChartDO;
 import com.fasterxml.jackson.core.type.TypeReference;
