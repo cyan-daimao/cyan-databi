@@ -43,8 +43,21 @@ public interface DashboardInfraConvert {
     @Named("jsonToChartRefs")
     default List<ChartRefValObj> jsonToChartRefs(String json) {
         if (json == null || json.isEmpty()) return List.of();
-        try { return OBJECT_MAPPER.readValue(json, new TypeReference<List<ChartRefValObj>>() {}); }
-        catch (Exception e) { throw new RuntimeException("图表引用JSON解析失败", e); }
+        try {
+            List<ChartRefValObj> list = OBJECT_MAPPER.readValue(json, new TypeReference<List<ChartRefValObj>>() {});
+            for (ChartRefValObj ref : list) {
+                if (ref.getTitleVisible() == null) {
+                    ref.setTitleVisible(true);
+                }
+                if (ref.getBorderStyle() == null) {
+                    ref.setBorderStyle("default");
+                }
+                if (ref.getCascadeFrom() == null) {
+                    ref.setCascadeFrom(List.of());
+                }
+            }
+            return list;
+        } catch (Exception e) { throw new RuntimeException("图表引用JSON解析失败", e); }
     }
 
     @Named("chartRefsToJson")
@@ -53,3 +66,4 @@ public interface DashboardInfraConvert {
         return JSON.toJSONString(list);
     }
 }
+// TASK: done

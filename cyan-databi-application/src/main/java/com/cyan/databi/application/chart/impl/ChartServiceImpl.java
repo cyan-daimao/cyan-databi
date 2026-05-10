@@ -10,6 +10,7 @@ import com.cyan.databi.application.analysis.cmd.AnalysisCmd;
 import com.cyan.databi.application.chart.ChartService;
 import com.cyan.databi.application.chart.bo.ChartBO;
 import com.cyan.databi.application.chart.cmd.ChartCmd;
+import com.cyan.databi.application.chart.cmd.ChartExecuteCmd;
 import com.cyan.databi.application.chart.convert.ChartAppConvert;
 import com.cyan.databi.domain.chart.Chart;
 import com.cyan.databi.domain.chart.query.ChartListQuery;
@@ -17,6 +18,7 @@ import com.cyan.databi.domain.chart.query.ChartPageQuery;
 import com.cyan.databi.domain.chart.repository.ChartRepository;
 import com.cyan.databi.enums.AnalysisType;
 import com.cyan.datametric.client.MetricBiAnalysisClient;
+import com.cyan.datametric.client.dto.MetricBiAnalysisCmd;
 import com.cyan.datametric.client.dto.MetricBiChartDataDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -120,11 +122,22 @@ public class ChartServiceImpl implements ChartService {
      */
     @Override
     public ChartDataBO executeChart(String chartId, String executor) {
+        return executeChart(chartId, executor, null);
+    }
+
+    /**
+     * 执行图表分析（支持传入自定义DSL）
+     */
+    @Override
+    public ChartDataBO executeChart(String chartId, String executor, ChartExecuteCmd executeCmd) {
         Chart chart = chartRepository.findById(chartId);
         Assert.notNull(chart, new SilentException("图表不存在"));
 
         if (chart.getActualAnalysisType() == AnalysisType.METRICS) {
-            Response<MetricBiChartDataDTO> response = metricBiAnalysisClient.execute(chart.getMetricAnalysisCmd());
+            MetricBiAnalysisCmd cmd = (executeCmd != null && executeCmd.getMetricAnalysisCmd() != null)
+                    ? executeCmd.getMetricAnalysisCmd()
+                    : chart.getMetricAnalysisCmd();
+            Response<MetricBiChartDataDTO> response = metricBiAnalysisClient.execute(cmd);
             MetricBiChartDataDTO dto = response.getData();
             if (dto == null) {
                 return new ChartDataBO()
@@ -143,6 +156,7 @@ public class ChartServiceImpl implements ChartService {
         AnalysisCmd cmd = buildAnalysisCmd(chart);
         return analysisService.execute(cmd, executor);
     }
+    // TASK: done
 
     /**
      * 预览图表SQL

@@ -10,6 +10,7 @@ import com.cyan.databi.application.analysis.bo.ChartDataBO;
 import com.cyan.databi.application.chart.ChartService;
 import com.cyan.databi.application.chart.bo.ChartBO;
 import com.cyan.databi.application.chart.cmd.ChartCmd;
+import com.cyan.databi.application.chart.cmd.ChartExecuteCmd;
 import com.cyan.databi.domain.chart.query.ChartListQuery;
 import com.cyan.databi.domain.chart.query.ChartPageQuery;
 import com.cyan.employee.login.filter.UserContextHolder;
@@ -119,8 +120,9 @@ public class ChartController {
      */
     @PostMapping("/{id}/execute")
     // API: ready
-    public Response<ChartDataDTO> execute(@PathVariable String id) {
-        ChartDataBO bo = chartService.executeChart(id, UserContextHolder.getCurrentEmployee().getPassport());
+    public Response<ChartDataDTO> execute(@PathVariable String id,
+                                          @RequestBody(required = false) ChartExecuteCmd cmd) {
+        ChartDataBO bo = chartService.executeChart(id, UserContextHolder.getCurrentEmployee().getPassport(), cmd);
         ChartDataDTO dto = AnalysisAdapterConvert.INSTANCE.toChartDataDTO(bo);
         return Response.success(dto);
     }

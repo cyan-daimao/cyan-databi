@@ -1,5 +1,6 @@
-package com.cyan.databi.domain.dashboard.valobj;
+package com.cyan.databi.adapter.dashboard.http.dto;
 
+import com.cyan.databi.adapter.chart.http.dto.ChartDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,7 +9,7 @@ import lombok.experimental.Accessors;
 import java.util.List;
 
 /**
- * 看板图表引用值对象
+ * 看板图表引用详情DTO（含图表完整元数据）
  *
  * @author cy.Y
  * @since 1.0.0
@@ -17,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class ChartRefValObj {
+public class DashboardChartRefDTO {
 
     /**
      * 图表ID
@@ -45,23 +46,27 @@ public class ChartRefValObj {
     private Integer h;
 
     /**
-     * 是否显示标题，默认true
+     * 是否显示标题
      */
     private Boolean titleVisible;
 
     /**
-     * 边框样式，默认"default"
+     * 边框样式
      */
     private String borderStyle;
 
     /**
-     * 背景色（hex），可为null
+     * 背景色
      */
     private String bgColor;
 
     /**
-     * 本图表受哪些图表的筛选值影响，默认空列表
+     * 本图表受哪些图表的筛选值影响
      */
     private List<String> cascadeFrom;
+
+    /**
+     * 图表完整元数据
+     */
+    private ChartDTO chart;
 }
-// TASK: done

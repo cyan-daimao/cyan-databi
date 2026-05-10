@@ -2,13 +2,19 @@ package com.cyan.databi.adapter.dashboard.http;
 
 import com.cyan.arch.common.api.Page;
 import com.cyan.arch.common.api.Response;
+import com.cyan.databi.adapter.chart.http.convert.ChartAdapterConvert;
+import com.cyan.databi.adapter.chart.http.dto.ChartDTO;
 import com.cyan.databi.adapter.dashboard.http.convert.DashboardAdapterConvert;
+import com.cyan.databi.adapter.dashboard.http.dto.DashboardChartRefDTO;
 import com.cyan.databi.adapter.dashboard.http.dto.DashboardDTO;
+import com.cyan.databi.application.chart.ChartService;
+import com.cyan.databi.application.chart.bo.ChartBO;
 import com.cyan.databi.application.dashboard.DashboardService;
 import com.cyan.databi.application.dashboard.bo.DashboardBO;
 import com.cyan.databi.application.dashboard.cmd.DashboardCmd;
 import com.cyan.databi.domain.dashboard.query.DashboardListQuery;
 import com.cyan.databi.domain.dashboard.query.DashboardPageQuery;
+import com.cyan.databi.domain.dashboard.valobj.ChartRefValObj;
 import com.cyan.employee.login.filter.UserContextHolder;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
@@ -27,9 +33,11 @@ import java.util.Optional;
 public class DashboardController {
 
     private final DashboardService dashboardService;
+    private final ChartService chartService;
 
-    public DashboardController(DashboardService dashboardService) {
+    public DashboardController(DashboardService dashboardService, ChartService chartService) {
         this.dashboardService = dashboardService;
+        this.chartService = chartService;
     }
 
     /**
@@ -75,6 +83,32 @@ public class DashboardController {
         DashboardDTO dto = DashboardAdapterConvert.INSTANCE.toDashboardDTO(bo);
         return Response.success(dto);
     }
+
+    /**
+     * 查询看板内图表详情列表
+     */
+    @GetMapping("/{id}/charts")
+    public Response<List<DashboardChartRefDTO>> findDashboardCharts(@PathVariable String id) {
+        DashboardBO dashboard = dashboardService.findById(id);
+        List<ChartRefValObj> chartRefs = Optional.ofNullable(dashboard.getChartRefs()).orElse(List.of());
+        List<DashboardChartRefDTO> result = chartRefs.stream().map(ref -> {
+            ChartBO chartBO = chartService.findById(ref.getChartId());
+            ChartDTO chartDTO = ChartAdapterConvert.INSTANCE.toChartDTO(chartBO);
+            return new DashboardChartRefDTO()
+                    .setChartId(ref.getChartId())
+                    .setX(ref.getX())
+                    .setY(ref.getY())
+                    .setW(ref.getW())
+                    .setH(ref.getH())
+                    .setTitleVisible(ref.getTitleVisible())
+                    .setBorderStyle(ref.getBorderStyle())
+                    .setBgColor(ref.getBgColor())
+                    .setCascadeFrom(ref.getCascadeFrom())
+                    .setChart(chartDTO);
+        }).toList();
+        return Response.success(result);
+    }
+    // TASK: done
 
     /**
      * 保存看板

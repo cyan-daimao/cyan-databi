@@ -4,6 +4,7 @@ import com.cyan.arch.common.api.Page;
 import com.cyan.databi.application.analysis.bo.ChartDataBO;
 import com.cyan.databi.application.chart.bo.ChartBO;
 import com.cyan.databi.application.chart.cmd.ChartCmd;
+import com.cyan.databi.application.chart.cmd.ChartExecuteCmd;
 import com.cyan.databi.domain.chart.query.ChartListQuery;
 import com.cyan.databi.domain.chart.query.ChartPageQuery;
 
@@ -55,6 +56,16 @@ public interface ChartService {
      * @return 图表数据
      */
     ChartDataBO executeChart(String chartId, String executor);
+
+    /**
+     * 执行图表分析（支持传入自定义DSL）
+     *
+     * @param chartId 图表ID
+     * @param executor 执行人
+     * @param cmd 执行命令（可选自定义DSL）
+     * @return 图表数据
+     */
+    ChartDataBO executeChart(String chartId, String executor, ChartExecuteCmd cmd);
 
     /**
      * 预览图表SQL
