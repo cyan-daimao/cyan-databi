@@ -85,6 +85,7 @@ public class AnalysisServiceImpl implements AnalysisService {
                 .setColumns(columns)
                 .setRows(rows)
                 .setSql(sql)
+                .setChartType(cmd.getChartType() != null ? cmd.getChartType().name() : null)
                 .setErrorMessage(result.getErrorMessage());
     }
 

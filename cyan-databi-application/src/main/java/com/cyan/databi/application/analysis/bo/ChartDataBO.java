@@ -46,6 +46,11 @@ public class ChartDataBO {
     private String sql;
 
     /**
+     * 图表类型
+     */
+    private String chartType;
+
+    /**
      * 错误信息
      */
     private String errorMessage;

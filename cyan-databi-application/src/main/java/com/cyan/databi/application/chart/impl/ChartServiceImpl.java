@@ -150,11 +150,16 @@ public class ChartServiceImpl implements ChartService {
                     .setColumns(dto.getColumns())
                     .setRows(dto.getRows())
                     .setSql(dto.getSql())
+                    .setChartType(dto.getChartType())
                     .setErrorMessage(dto.getErrorMessage());
         }
 
         AnalysisCmd cmd = buildAnalysisCmd(chart);
-        return analysisService.execute(cmd, executor);
+        ChartDataBO result = analysisService.execute(cmd, executor);
+        if (result != null && chart.getChartType() != null) {
+            result.setChartType(chart.getChartType().name());
+        }
+        return result;
     }
     // TASK: done
 
