@@ -44,4 +44,9 @@ public interface DashboardRepository {
      * 删除看板
      */
     void deleteById(String id);
+
+    /**
+     * 判断是否存在引用指定图表的看板
+     */
+    boolean existsByChartId(String chartId);
 }

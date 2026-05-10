@@ -100,4 +100,14 @@ public class DashboardRepositoryImpl implements DashboardRepository {
     public void deleteById(String id) {
         dashboardMapper.deleteById(id);
     }
+
+    /**
+     * 判断是否存在引用指定图表的看板
+     */
+    @Override
+    public boolean existsByChartId(String chartId) {
+        LambdaQueryWrapper<DashboardDO> wrapper = new LambdaQueryWrapper<>();
+        wrapper.like(DashboardDO::getChartRefs, "\"chartId\":\"" + chartId + "\"");
+        return dashboardMapper.selectCount(wrapper) > 0;
+    }
 }

@@ -16,6 +16,7 @@ import com.cyan.databi.domain.chart.Chart;
 import com.cyan.databi.domain.chart.query.ChartListQuery;
 import com.cyan.databi.domain.chart.query.ChartPageQuery;
 import com.cyan.databi.domain.chart.repository.ChartRepository;
+import com.cyan.databi.domain.dashboard.repository.DashboardRepository;
 import com.cyan.databi.enums.AnalysisType;
 import com.cyan.datametric.client.MetricBiAnalysisClient;
 import com.cyan.datametric.client.dto.MetricBiAnalysisCmd;
@@ -38,13 +39,16 @@ public class ChartServiceImpl implements ChartService {
     private final ChartRepository chartRepository;
     private final AnalysisService analysisService;
     private final MetricBiAnalysisClient metricBiAnalysisClient;
+    private final DashboardRepository dashboardRepository;
 
     public ChartServiceImpl(ChartRepository chartRepository,
                             AnalysisService analysisService,
-                            MetricBiAnalysisClient metricBiAnalysisClient) {
+                            MetricBiAnalysisClient metricBiAnalysisClient,
+                            DashboardRepository dashboardRepository) {
         this.chartRepository = chartRepository;
         this.analysisService = analysisService;
         this.metricBiAnalysisClient = metricBiAnalysisClient;
+        this.dashboardRepository = dashboardRepository;
     }
 
     /**
@@ -114,6 +118,9 @@ public class ChartServiceImpl implements ChartService {
     public void delete(String id) {
         Chart existing = chartRepository.findById(id);
         Assert.notNull(existing, new SilentException("图表不存在"));
+        if (dashboardRepository.existsByChartId(id)) {
+            throw new SilentException("该图表已被看板引用，无法删除");
+        }
         existing.delete(chartRepository);
     }
 
