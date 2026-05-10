@@ -52,6 +52,8 @@ public class ChartRepositoryImpl implements ChartRepository {
         LambdaQueryWrapper<ChartDO> wrapper = new LambdaQueryWrapper<ChartDO>()
                 .like(StrUtils.isNotBlank(query.getName()), ChartDO::getName, query.getName())
                 .eq(StrUtils.isNotBlank(query.getDatasetId()), ChartDO::getDatasetId, com.cyan.arch.common.util.Convert.toLong(query.getDatasetId()))
+                .eq(StrUtils.isNotBlank(query.getChartType()), ChartDO::getChartType,
+                        StrUtils.isNotBlank(query.getChartType()) ? com.cyan.databi.enums.ChartType.valueOf(query.getChartType()) : null)
                 .eq(StrUtils.isNotBlank(query.getCreatedBy()), ChartDO::getCreatedBy, query.getCreatedBy())
                 .orderByDesc(ChartDO::getCreatedAt);
         List<ChartDO> dos = chartMapper.selectList(wrapper);
@@ -106,6 +108,8 @@ public class ChartRepositoryImpl implements ChartRepository {
         return new LambdaQueryWrapper<ChartDO>()
                 .like(StrUtils.isNotBlank(query.getName()), ChartDO::getName, query.getName())
                 .eq(StrUtils.isNotBlank(query.getDatasetId()), ChartDO::getDatasetId, com.cyan.arch.common.util.Convert.toLong(query.getDatasetId()))
+                .eq(StrUtils.isNotBlank(query.getChartType()), ChartDO::getChartType,
+                        StrUtils.isNotBlank(query.getChartType()) ? com.cyan.databi.enums.ChartType.valueOf(query.getChartType()) : null)
                 .eq(StrUtils.isNotBlank(query.getCreatedBy()), ChartDO::getCreatedBy, query.getCreatedBy())
                 .orderByDesc(ChartDO::getCreatedAt);
     }

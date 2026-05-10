@@ -42,6 +42,7 @@ public class ChartController {
     @GetMapping
     public Response<Page<ChartDTO>> page(@RequestParam(required = false) String name,
                                           @RequestParam(required = false) String datasetId,
+                                          @RequestParam(required = false) String chartType,
                                           @RequestParam(required = false) Long current,
                                           @RequestParam(required = false) Long size) {
         current = current == null ? 1L : current;
@@ -49,6 +50,7 @@ public class ChartController {
         ChartPageQuery query = new ChartPageQuery()
                 .setName(name)
                 .setDatasetId(datasetId)
+                .setChartType(chartType)
                 .setCreatedBy(UserContextHolder.getCurrentEmployee().getPassport());
         query.setCurrent(current).setSize(size);
         Page<ChartBO> page = chartService.page(query);
@@ -63,10 +65,12 @@ public class ChartController {
      */
     @GetMapping("/list")
     public Response<List<ChartDTO>> list(@RequestParam(required = false) String name,
-                                          @RequestParam(required = false) String datasetId) {
+                                          @RequestParam(required = false) String datasetId,
+                                          @RequestParam(required = false) String chartType) {
         ChartListQuery query = new ChartListQuery()
                 .setName(name)
                 .setDatasetId(datasetId)
+                .setChartType(chartType)
                 .setCreatedBy(UserContextHolder.getCurrentEmployee().getPassport());
         List<ChartBO> bos = chartService.list(query);
         List<ChartDTO> dtos = Optional.ofNullable(bos).orElse(List.of())

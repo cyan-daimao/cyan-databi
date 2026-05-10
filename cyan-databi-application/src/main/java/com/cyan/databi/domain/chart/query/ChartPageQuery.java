@@ -34,4 +34,9 @@ public class ChartPageQuery extends Pagination {
      * 创建人
      */
     private String createdBy;
+
+    /**
+     * 图表类型
+     */
+    private String chartType;
 }
