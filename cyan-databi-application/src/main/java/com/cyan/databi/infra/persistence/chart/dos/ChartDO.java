@@ -56,42 +56,6 @@ public class ChartDO {
     private ChartType chartType;
 
     /**
-     * 维度配置 JSON
-     */
-    @TableField(value = "dimension_config")
-    private String dimensionConfig;
-
-    /**
-     * 指标配置 JSON
-     */
-    @TableField(value = "metric_config")
-    private String metricConfig;
-
-    /**
-     * 过滤配置 JSON
-     */
-    @TableField(value = "filter_config")
-    private String filterConfig;
-
-    /**
-     * 排序配置 JSON
-     */
-    @TableField(value = "order_config")
-    private String orderConfig;
-
-    /**
-     * 限制条数
-     */
-    @TableField(value = "limit_value")
-    private Integer limitValue;
-
-    /**
-     * 生成的SQL内容
-     */
-    @TableField(value = "sql_content")
-    private String sqlContent;
-
-    /**
      * 创建人
      */
     @TableField(value = "created_by")

@@ -141,6 +141,7 @@ public class ChartController {
                 .setRows(bo.getRows())
                 .setSql(bo.getSql())
                 .setChartType(bo.getChartType())
+                .setDsl(bo.getDsl())
                 .setErrorMessage(bo.getErrorMessage());
     }
 }

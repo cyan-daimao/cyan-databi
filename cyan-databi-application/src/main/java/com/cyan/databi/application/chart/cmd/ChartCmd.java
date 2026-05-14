@@ -1,10 +1,6 @@
 package com.cyan.databi.application.chart.cmd;
 
 import com.cyan.datametric.client.dto.MetricBiAnalysisCmd;
-import com.cyan.databi.domain.chart.valobj.DimensionConfigValObj;
-import com.cyan.databi.domain.chart.valobj.MetricConfigValObj;
-import com.cyan.databi.domain.chart.valobj.FilterConfigValObj;
-import com.cyan.databi.domain.chart.valobj.OrderConfigValObj;
 import com.cyan.databi.enums.ChartType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -13,7 +9,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
-import java.util.List;
 
 /**
  * 图表命令对象
@@ -48,34 +43,4 @@ public class ChartCmd {
      */
     @NotNull(message = "图表类型不能为空")
     private ChartType chartType;
-
-    /**
-     * 维度配置
-     */
-    private List<DimensionConfigValObj> dimensions;
-
-    /**
-     * 指标配置
-     */
-    private List<MetricConfigValObj> metrics;
-
-    /**
-     * 过滤配置
-     */
-    private List<FilterConfigValObj> filters;
-
-    /**
-     * 排序配置
-     */
-    private List<OrderConfigValObj> orders;
-
-    /**
-     * 限制条数
-     */
-    private Integer limitValue;
-
-    /**
-     * 生成的SQL内容
-     */
-    private String sqlContent;
 }

@@ -1,10 +1,6 @@
 package com.cyan.databi.application.chart.bo;
 
 import com.cyan.datametric.client.dto.MetricBiAnalysisCmd;
-import com.cyan.databi.domain.chart.valobj.DimensionConfigValObj;
-import com.cyan.databi.domain.chart.valobj.MetricConfigValObj;
-import com.cyan.databi.domain.chart.valobj.FilterConfigValObj;
-import com.cyan.databi.domain.chart.valobj.OrderConfigValObj;
 import com.cyan.databi.enums.ChartType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,7 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * 图表业务对象
@@ -50,36 +45,6 @@ public class ChartBO {
      * 图表类型
      */
     private ChartType chartType;
-
-    /**
-     * 维度配置
-     */
-    private List<DimensionConfigValObj> dimensions;
-
-    /**
-     * 指标配置
-     */
-    private List<MetricConfigValObj> metrics;
-
-    /**
-     * 过滤配置
-     */
-    private List<FilterConfigValObj> filters;
-
-    /**
-     * 排序配置
-     */
-    private List<OrderConfigValObj> orders;
-
-    /**
-     * 限制条数
-     */
-    private Integer limitValue;
-
-    /**
-     * 生成的SQL内容
-     */
-    private String sqlContent;
 
     /**
      * 创建人

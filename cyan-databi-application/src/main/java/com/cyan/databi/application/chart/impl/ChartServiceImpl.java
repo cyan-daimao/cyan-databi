@@ -151,6 +151,7 @@ public class ChartServiceImpl implements ChartService {
                 .setRows(dto.getRows())
                 .setSql(dto.getSql())
                 .setChartType(dto.getChartType())
+                .setDsl(dto.getDsl())
                 .setErrorMessage(dto.getErrorMessage());
         if (chart.getChartType() != null) {
             result.setChartType(chart.getChartType().name());

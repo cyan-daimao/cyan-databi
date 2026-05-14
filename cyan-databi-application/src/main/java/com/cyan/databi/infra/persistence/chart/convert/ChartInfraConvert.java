@@ -12,8 +12,6 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
 
-import java.util.List;
-
 /**
  * 图表基础设施层转换器
  *
@@ -31,10 +29,6 @@ public interface ChartInfraConvert {
      */
     @Mapping(target = "id", expression = "java(com.cyan.arch.common.util.Convert.toStr(chartDO.getId()))")
     @Mapping(target = "metricAnalysisCmd", source = "metricAnalysisCmd", qualifiedByName = "jsonToMetricAnalysisCmd")
-    @Mapping(target = "dimensions", source = "dimensionConfig", qualifiedByName = "jsonToDimensions")
-    @Mapping(target = "metrics", source = "metricConfig", qualifiedByName = "jsonToMetrics")
-    @Mapping(target = "filters", source = "filterConfig", qualifiedByName = "jsonToFilters")
-    @Mapping(target = "orders", source = "orderConfig", qualifiedByName = "jsonToOrders")
     Chart toChart(ChartDO chartDO);
 
     /**
@@ -42,10 +36,6 @@ public interface ChartInfraConvert {
      */
     @Mapping(target = "id", expression = "java(com.cyan.arch.common.util.Convert.toLong(chart.getId()))")
     @Mapping(target = "metricAnalysisCmd", source = "metricAnalysisCmd", qualifiedByName = "metricAnalysisCmdToJson")
-    @Mapping(target = "dimensionConfig", source = "dimensions", qualifiedByName = "dimensionsToJson")
-    @Mapping(target = "metricConfig", source = "metrics", qualifiedByName = "metricsToJson")
-    @Mapping(target = "filterConfig", source = "filters", qualifiedByName = "filtersToJson")
-    @Mapping(target = "orderConfig", source = "orders", qualifiedByName = "ordersToJson")
     ChartDO toChartDO(Chart chart);
 
     @Named("jsonToMetricAnalysisCmd")
@@ -66,57 +56,5 @@ public interface ChartInfraConvert {
             return null;
         }
         return JSON.toJSONString(cmd);
-    }
-
-    @Named("jsonToDimensions")
-    default List<com.cyan.databi.domain.chart.valobj.DimensionConfigValObj> jsonToDimensions(String json) {
-        if (json == null || json.isEmpty()) return List.of();
-        try { return OBJECT_MAPPER.readValue(json, new TypeReference<List<com.cyan.databi.domain.chart.valobj.DimensionConfigValObj>>() {}); }
-        catch (Exception e) { throw new RuntimeException("维度配置JSON解析失败", e); }
-    }
-
-    @Named("dimensionsToJson")
-    default String dimensionsToJson(List<com.cyan.databi.domain.chart.valobj.DimensionConfigValObj> list) {
-        if (list == null || list.isEmpty()) return null;
-        return JSON.toJSONString(list);
-    }
-
-    @Named("jsonToMetrics")
-    default List<com.cyan.databi.domain.chart.valobj.MetricConfigValObj> jsonToMetrics(String json) {
-        if (json == null || json.isEmpty()) return List.of();
-        try { return OBJECT_MAPPER.readValue(json, new TypeReference<List<com.cyan.databi.domain.chart.valobj.MetricConfigValObj>>() {}); }
-        catch (Exception e) { throw new RuntimeException("指标配置JSON解析失败", e); }
-    }
-
-    @Named("metricsToJson")
-    default String metricsToJson(List<com.cyan.databi.domain.chart.valobj.MetricConfigValObj> list) {
-        if (list == null || list.isEmpty()) return null;
-        return JSON.toJSONString(list);
-    }
-
-    @Named("jsonToFilters")
-    default List<com.cyan.databi.domain.chart.valobj.FilterConfigValObj> jsonToFilters(String json) {
-        if (json == null || json.isEmpty()) return List.of();
-        try { return OBJECT_MAPPER.readValue(json, new TypeReference<List<com.cyan.databi.domain.chart.valobj.FilterConfigValObj>>() {}); }
-        catch (Exception e) { throw new RuntimeException("过滤配置JSON解析失败", e); }
-    }
-
-    @Named("filtersToJson")
-    default String filtersToJson(List<com.cyan.databi.domain.chart.valobj.FilterConfigValObj> list) {
-        if (list == null || list.isEmpty()) return null;
-        return JSON.toJSONString(list);
-    }
-
-    @Named("jsonToOrders")
-    default List<com.cyan.databi.domain.chart.valobj.OrderConfigValObj> jsonToOrders(String json) {
-        if (json == null || json.isEmpty()) return List.of();
-        try { return OBJECT_MAPPER.readValue(json, new TypeReference<List<com.cyan.databi.domain.chart.valobj.OrderConfigValObj>>() {}); }
-        catch (Exception e) { throw new RuntimeException("排序配置JSON解析失败", e); }
-    }
-
-    @Named("ordersToJson")
-    default String ordersToJson(List<com.cyan.databi.domain.chart.valobj.OrderConfigValObj> list) {
-        if (list == null || list.isEmpty()) return null;
-        return JSON.toJSONString(list);
     }
 }

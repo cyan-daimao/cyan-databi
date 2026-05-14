@@ -1,5 +1,6 @@
 package com.cyan.databi.application.chart.bo;
 
+import com.cyan.datametric.client.dto.MetricBiAnalysisCmd;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -54,4 +55,9 @@ public class ChartDataBO {
      * 错误信息
      */
     private String errorMessage;
+
+    /**
+     * enriched DSL（包含 dimName/metricName）
+     */
+    private MetricBiAnalysisCmd dsl;
 }
