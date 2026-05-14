@@ -1,8 +1,8 @@
 package com.cyan.databi.application.chart;
 
 import com.cyan.arch.common.api.Page;
-import com.cyan.databi.application.analysis.bo.ChartDataBO;
 import com.cyan.databi.application.chart.bo.ChartBO;
+import com.cyan.databi.application.chart.bo.ChartDataBO;
 import com.cyan.databi.application.chart.cmd.ChartCmd;
 import com.cyan.databi.application.chart.cmd.ChartExecuteCmd;
 import com.cyan.databi.domain.chart.query.ChartListQuery;

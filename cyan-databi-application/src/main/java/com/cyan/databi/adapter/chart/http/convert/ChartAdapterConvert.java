@@ -10,7 +10,6 @@ import com.cyan.databi.domain.chart.valobj.FilterConfigValObj;
 import com.cyan.databi.domain.chart.valobj.MetricConfigValObj;
 import com.cyan.databi.domain.chart.valobj.OrderConfigValObj;
 import com.cyan.databi.enums.AggregateType;
-import com.cyan.databi.enums.AnalysisType;
 import com.cyan.databi.enums.ChartType;
 import com.cyan.databi.enums.FilterOperator;
 import com.cyan.databi.enums.SortDirection;
@@ -48,7 +47,6 @@ public interface ChartAdapterConvert {
         ChartCmd cmd = new ChartCmd();
         cmd.setName(rpcCmd.getName());
         cmd.setDescription(rpcCmd.getDescription());
-        cmd.setAnalysisType(rpcCmd.getAnalysisType() != null ? AnalysisType.valueOf(rpcCmd.getAnalysisType()) : null);
         cmd.setChartType(rpcCmd.getChartType() != null ? ChartType.valueOf(rpcCmd.getChartType()) : null);
         cmd.setMetricAnalysisCmd(rpcCmd.getMetricAnalysisCmd());
         cmd.setLimitValue(rpcCmd.getLimitValue());

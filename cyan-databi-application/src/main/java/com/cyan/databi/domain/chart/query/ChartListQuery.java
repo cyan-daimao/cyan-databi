@@ -23,11 +23,6 @@ public class ChartListQuery {
     private String name;
 
     /**
-     * 数据集ID
-     */
-    private String datasetId;
-
-    /**
      * 创建人
      */
     private String createdBy;

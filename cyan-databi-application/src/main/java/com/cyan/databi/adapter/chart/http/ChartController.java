@@ -2,13 +2,12 @@ package com.cyan.databi.adapter.chart.http;
 
 import com.cyan.arch.common.api.Page;
 import com.cyan.arch.common.api.Response;
-import com.cyan.databi.adapter.analysis.http.convert.AnalysisAdapterConvert;
-import com.cyan.databi.adapter.analysis.http.dto.ChartDataDTO;
 import com.cyan.databi.adapter.chart.http.convert.ChartAdapterConvert;
 import com.cyan.databi.adapter.chart.http.dto.ChartDTO;
-import com.cyan.databi.application.analysis.bo.ChartDataBO;
+import com.cyan.databi.adapter.chart.http.dto.ChartDataDTO;
 import com.cyan.databi.application.chart.ChartService;
 import com.cyan.databi.application.chart.bo.ChartBO;
+import com.cyan.databi.application.chart.bo.ChartDataBO;
 import com.cyan.databi.application.chart.cmd.ChartCmd;
 import com.cyan.databi.application.chart.cmd.ChartExecuteCmd;
 import com.cyan.databi.domain.chart.query.ChartListQuery;
@@ -41,7 +40,6 @@ public class ChartController {
      */
     @GetMapping
     public Response<Page<ChartDTO>> page(@RequestParam(required = false) String name,
-                                          @RequestParam(required = false) String datasetId,
                                           @RequestParam(required = false) String chartType,
                                           @RequestParam(required = false) Long current,
                                           @RequestParam(required = false) Long size) {
@@ -49,7 +47,6 @@ public class ChartController {
         size = size == null ? 10L : size;
         ChartPageQuery query = new ChartPageQuery()
                 .setName(name)
-                .setDatasetId(datasetId)
                 .setChartType(chartType)
                 .setCreatedBy(UserContextHolder.getCurrentEmployee().getPassport());
         query.setCurrent(current).setSize(size);
@@ -65,11 +62,9 @@ public class ChartController {
      */
     @GetMapping("/list")
     public Response<List<ChartDTO>> list(@RequestParam(required = false) String name,
-                                          @RequestParam(required = false) String datasetId,
                                           @RequestParam(required = false) String chartType) {
         ChartListQuery query = new ChartListQuery()
                 .setName(name)
-                .setDatasetId(datasetId)
                 .setChartType(chartType)
                 .setCreatedBy(UserContextHolder.getCurrentEmployee().getPassport());
         List<ChartBO> bos = chartService.list(query);
@@ -92,7 +87,6 @@ public class ChartController {
      * 保存图表
      */
     @PostMapping
-    // API: ready
     public Response<ChartDTO> save(@RequestBody @Valid ChartCmd cmd) {
         ChartBO bo = chartService.save(cmd, UserContextHolder.getCurrentEmployee().getPassport());
         ChartDTO dto = ChartAdapterConvert.INSTANCE.toChartDTO(bo);
@@ -103,7 +97,6 @@ public class ChartController {
      * 更新图表
      */
     @PutMapping("/{id}")
-    // API: ready
     public Response<ChartDTO> update(@PathVariable String id, @RequestBody @Valid ChartCmd cmd) {
         ChartBO bo = chartService.update(id, cmd);
         ChartDTO dto = ChartAdapterConvert.INSTANCE.toChartDTO(bo);
@@ -123,11 +116,10 @@ public class ChartController {
      * 执行图表分析
      */
     @PostMapping("/{id}/execute")
-    // API: ready
     public Response<ChartDataDTO> execute(@PathVariable String id,
                                           @RequestBody(required = false) ChartExecuteCmd cmd) {
         ChartDataBO bo = chartService.executeChart(id, UserContextHolder.getCurrentEmployee().getPassport(), cmd);
-        ChartDataDTO dto = AnalysisAdapterConvert.INSTANCE.toChartDataDTO(bo);
+        ChartDataDTO dto = toChartDataDTO(bo);
         return Response.success(dto);
     }
 
@@ -135,9 +127,20 @@ public class ChartController {
      * 预览图表SQL
      */
     @GetMapping("/{id}/preview-sql")
-    // API: ready
     public Response<String> previewSql(@PathVariable String id) {
         String sql = chartService.previewChartSql(id);
         return Response.success(sql);
+    }
+
+    private ChartDataDTO toChartDataDTO(ChartDataBO bo) {
+        if (bo == null) return null;
+        return new ChartDataDTO()
+                .setStatus(bo.getStatus())
+                .setCostTimeMs(bo.getCostTimeMs())
+                .setColumns(bo.getColumns())
+                .setRows(bo.getRows())
+                .setSql(bo.getSql())
+                .setChartType(bo.getChartType())
+                .setErrorMessage(bo.getErrorMessage());
     }
 }

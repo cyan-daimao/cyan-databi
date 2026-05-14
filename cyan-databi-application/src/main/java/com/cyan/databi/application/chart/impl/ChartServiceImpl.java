@@ -4,11 +4,9 @@ import com.cyan.arch.common.api.Assert;
 import com.cyan.arch.common.api.Page;
 import com.cyan.arch.common.api.Response;
 import com.cyan.arch.common.api.SilentException;
-import com.cyan.databi.application.analysis.AnalysisService;
-import com.cyan.databi.application.analysis.bo.ChartDataBO;
-import com.cyan.databi.application.analysis.cmd.AnalysisCmd;
 import com.cyan.databi.application.chart.ChartService;
 import com.cyan.databi.application.chart.bo.ChartBO;
+import com.cyan.databi.application.chart.bo.ChartDataBO;
 import com.cyan.databi.application.chart.cmd.ChartCmd;
 import com.cyan.databi.application.chart.cmd.ChartExecuteCmd;
 import com.cyan.databi.application.chart.convert.ChartAppConvert;
@@ -17,7 +15,6 @@ import com.cyan.databi.domain.chart.query.ChartListQuery;
 import com.cyan.databi.domain.chart.query.ChartPageQuery;
 import com.cyan.databi.domain.chart.repository.ChartRepository;
 import com.cyan.databi.domain.dashboard.repository.DashboardRepository;
-import com.cyan.databi.enums.AnalysisType;
 import com.cyan.datametric.client.MetricBiAnalysisClient;
 import com.cyan.datametric.client.dto.MetricBiAnalysisCmd;
 import com.cyan.datametric.client.dto.MetricBiChartDataDTO;
@@ -37,16 +34,13 @@ import java.util.Optional;
 public class ChartServiceImpl implements ChartService {
 
     private final ChartRepository chartRepository;
-    private final AnalysisService analysisService;
     private final MetricBiAnalysisClient metricBiAnalysisClient;
     private final DashboardRepository dashboardRepository;
 
     public ChartServiceImpl(ChartRepository chartRepository,
-                            AnalysisService analysisService,
                             MetricBiAnalysisClient metricBiAnalysisClient,
                             DashboardRepository dashboardRepository) {
         this.chartRepository = chartRepository;
-        this.analysisService = analysisService;
         this.metricBiAnalysisClient = metricBiAnalysisClient;
         this.dashboardRepository = dashboardRepository;
     }
@@ -140,35 +134,29 @@ public class ChartServiceImpl implements ChartService {
         Chart chart = chartRepository.findById(chartId);
         Assert.notNull(chart, new SilentException("图表不存在"));
 
-        if (chart.getActualAnalysisType() == AnalysisType.METRICS) {
-            MetricBiAnalysisCmd cmd = (executeCmd != null && executeCmd.getMetricAnalysisCmd() != null)
-                    ? executeCmd.getMetricAnalysisCmd()
-                    : chart.getMetricAnalysisCmd();
-            Response<MetricBiChartDataDTO> response = metricBiAnalysisClient.execute(cmd);
-            MetricBiChartDataDTO dto = response.getData();
-            if (dto == null) {
-                return new ChartDataBO()
-                        .setStatus("FAILED")
-                        .setErrorMessage(response.getMessage());
-            }
+        MetricBiAnalysisCmd cmd = (executeCmd != null && executeCmd.getMetricAnalysisCmd() != null)
+                ? executeCmd.getMetricAnalysisCmd()
+                : chart.getMetricAnalysisCmd();
+        Response<MetricBiChartDataDTO> response = metricBiAnalysisClient.execute(cmd);
+        MetricBiChartDataDTO dto = response.getData();
+        if (dto == null) {
             return new ChartDataBO()
-                    .setStatus(dto.getStatus())
-                    .setCostTimeMs(dto.getCostTimeMs())
-                    .setColumns(dto.getColumns())
-                    .setRows(dto.getRows())
-                    .setSql(dto.getSql())
-                    .setChartType(dto.getChartType())
-                    .setErrorMessage(dto.getErrorMessage());
+                    .setStatus("FAILED")
+                    .setErrorMessage(response.getMessage());
         }
-
-        AnalysisCmd cmd = buildAnalysisCmd(chart);
-        ChartDataBO result = analysisService.execute(cmd, executor);
-        if (result != null && chart.getChartType() != null) {
+        ChartDataBO result = new ChartDataBO()
+                .setStatus(dto.getStatus())
+                .setCostTimeMs(dto.getCostTimeMs())
+                .setColumns(dto.getColumns())
+                .setRows(dto.getRows())
+                .setSql(dto.getSql())
+                .setChartType(dto.getChartType())
+                .setErrorMessage(dto.getErrorMessage());
+        if (chart.getChartType() != null) {
             result.setChartType(chart.getChartType().name());
         }
         return result;
     }
-    // TASK: done
 
     /**
      * 预览图表SQL
@@ -178,26 +166,7 @@ public class ChartServiceImpl implements ChartService {
         Chart chart = chartRepository.findById(chartId);
         Assert.notNull(chart, new SilentException("图表不存在"));
 
-        if (chart.getActualAnalysisType() == AnalysisType.METRICS) {
-            Response<String> response = metricBiAnalysisClient.previewSql(chart.getMetricAnalysisCmd());
-            return response.getData();
-        }
-
-        AnalysisCmd cmd = buildAnalysisCmd(chart);
-        return analysisService.previewSql(cmd);
-    }
-
-    /**
-     * 构建分析命令
-     */
-    private AnalysisCmd buildAnalysisCmd(Chart chart) {
-        return new AnalysisCmd()
-                .setDatasetId(chart.getDatasetId())
-                .setChartType(chart.getChartType())
-                .setDimensions(chart.getDimensions())
-                .setMetrics(chart.getMetrics())
-                .setFilters(chart.getFilters())
-                .setOrders(chart.getOrders())
-                .setLimitValue(chart.getLimitValue());
+        Response<String> response = metricBiAnalysisClient.previewSql(chart.getMetricAnalysisCmd());
+        return response.getData();
     }
 }

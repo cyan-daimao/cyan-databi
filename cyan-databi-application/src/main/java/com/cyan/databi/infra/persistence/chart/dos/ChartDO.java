@@ -44,18 +44,6 @@ public class ChartDO {
     private String description;
 
     /**
-     * 关联数据集ID
-     */
-    @TableField(value = "dataset_id")
-    private Long datasetId;
-
-    /**
-     * 分析类型
-     */
-    @TableField(value = "analysis_type")
-    private String analysisType;
-
-    /**
      * 指标分析DSL JSON
      */
     @TableField(value = "metric_analysis_cmd")

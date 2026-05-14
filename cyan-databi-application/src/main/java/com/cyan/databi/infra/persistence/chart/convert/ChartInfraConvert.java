@@ -4,7 +4,6 @@ import com.cyan.arch.common.mapstruct.MapstructConvert;
 import com.cyan.arch.common.util.JSON;
 import com.cyan.databi.domain.chart.Chart;
 import com.cyan.datametric.client.dto.MetricBiAnalysisCmd;
-import com.cyan.databi.enums.AnalysisType;
 import com.cyan.databi.infra.persistence.chart.dos.ChartDO;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,8 +30,6 @@ public interface ChartInfraConvert {
      * DO 转 Domain
      */
     @Mapping(target = "id", expression = "java(com.cyan.arch.common.util.Convert.toStr(chartDO.getId()))")
-    @Mapping(target = "datasetId", expression = "java(com.cyan.arch.common.util.Convert.toStr(chartDO.getDatasetId()))")
-    @Mapping(target = "analysisType", source = "analysisType", qualifiedByName = "strToAnalysisType")
     @Mapping(target = "metricAnalysisCmd", source = "metricAnalysisCmd", qualifiedByName = "jsonToMetricAnalysisCmd")
     @Mapping(target = "dimensions", source = "dimensionConfig", qualifiedByName = "jsonToDimensions")
     @Mapping(target = "metrics", source = "metricConfig", qualifiedByName = "jsonToMetrics")
@@ -44,30 +41,12 @@ public interface ChartInfraConvert {
      * Domain 转 DO
      */
     @Mapping(target = "id", expression = "java(com.cyan.arch.common.util.Convert.toLong(chart.getId()))")
-    @Mapping(target = "datasetId", expression = "java(com.cyan.arch.common.util.Convert.toLong(chart.getDatasetId()))")
-    @Mapping(target = "analysisType", source = "analysisType", qualifiedByName = "analysisTypeToStr")
     @Mapping(target = "metricAnalysisCmd", source = "metricAnalysisCmd", qualifiedByName = "metricAnalysisCmdToJson")
     @Mapping(target = "dimensionConfig", source = "dimensions", qualifiedByName = "dimensionsToJson")
     @Mapping(target = "metricConfig", source = "metrics", qualifiedByName = "metricsToJson")
     @Mapping(target = "filterConfig", source = "filters", qualifiedByName = "filtersToJson")
     @Mapping(target = "orderConfig", source = "orders", qualifiedByName = "ordersToJson")
     ChartDO toChartDO(Chart chart);
-
-    @Named("strToAnalysisType")
-    default AnalysisType strToAnalysisType(String str) {
-        if (str == null || str.isEmpty()) {
-            return AnalysisType.DATASET;
-        }
-        return AnalysisType.valueOf(str);
-    }
-
-    @Named("analysisTypeToStr")
-    default String analysisTypeToStr(AnalysisType type) {
-        if (type == null) {
-            return null;
-        }
-        return type.name();
-    }
 
     @Named("jsonToMetricAnalysisCmd")
     default MetricBiAnalysisCmd jsonToMetricAnalysisCmd(String json) {

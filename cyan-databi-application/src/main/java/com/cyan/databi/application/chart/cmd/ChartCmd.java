@@ -1,15 +1,10 @@
 package com.cyan.databi.application.chart.cmd;
 
 import com.cyan.datametric.client.dto.MetricBiAnalysisCmd;
-import com.cyan.datametric.client.dto.MetricBiAnalysisCmd.MetricRef;
-import com.cyan.datametric.client.dto.MetricBiAnalysisCmd.DimensionRef;
-import com.cyan.datametric.client.dto.MetricBiAnalysisCmd.FilterRef;
-import com.cyan.datametric.client.dto.MetricBiAnalysisCmd.OrderRef;
 import com.cyan.databi.domain.chart.valobj.DimensionConfigValObj;
 import com.cyan.databi.domain.chart.valobj.MetricConfigValObj;
 import com.cyan.databi.domain.chart.valobj.FilterConfigValObj;
 import com.cyan.databi.domain.chart.valobj.OrderConfigValObj;
-import com.cyan.databi.enums.AnalysisType;
 import com.cyan.databi.enums.ChartType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -42,16 +37,6 @@ public class ChartCmd {
      * 图表描述
      */
     private String description;
-
-    /**
-     * 关联数据集ID
-     */
-    private String datasetId;
-
-    /**
-     * 分析类型
-     */
-    private AnalysisType analysisType;
 
     /**
      * 指标分析DSL

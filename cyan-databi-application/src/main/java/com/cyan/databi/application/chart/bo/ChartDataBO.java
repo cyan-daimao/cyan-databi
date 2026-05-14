@@ -1,4 +1,4 @@
-package com.cyan.databi.adapter.analysis.http.dto;
+package com.cyan.databi.application.chart.bo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 图表数据传输对象
+ * 图表数据业务对象
  *
  * @author cy.Y
  * @since 1.0.0
@@ -18,7 +18,7 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class ChartDataDTO {
+public class ChartDataBO {
 
     /**
      * 执行状态

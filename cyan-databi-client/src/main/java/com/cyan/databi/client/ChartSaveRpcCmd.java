@@ -28,11 +28,6 @@ public class ChartSaveRpcCmd {
     private String description;
 
     /**
-     * 分析类型（ChatBI 统一用 METRICS）
-     */
-    private String analysisType;
-
-    /**
      * 图表类型
      */
     private String chartType;
