@@ -1,6 +1,6 @@
 package com.cyan.databi.adapter.dashboard.http.convert;
 
-import com.cyan.arch.common.mapstruct.MapstructConvert;
+import com.cyan.arch.base.mapstruct.MapstructConvert;
 import com.cyan.databi.adapter.dashboard.http.dto.DashboardDTO;
 import com.cyan.databi.application.dashboard.bo.DashboardBO;
 import org.mapstruct.Mapper;
