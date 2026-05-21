@@ -1,5 +1,6 @@
 package com.cyan.databi.infra.persistence.chart.dos;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
@@ -28,7 +29,7 @@ public class ChartDO {
     /**
      * 主键
      */
-    @TableId(value = "id")
+    @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
 
     /**
@@ -60,6 +61,12 @@ public class ChartDO {
      */
     @TableField(value = "created_by")
     private String createdBy;
+
+    /**
+     * 修改人
+     */
+    @TableField(value = "updated_by")
+    private String updatedBy;
 
     /**
      * 创建时间

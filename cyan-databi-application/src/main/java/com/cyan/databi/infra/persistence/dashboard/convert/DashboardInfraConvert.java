@@ -20,7 +20,7 @@ import java.util.List;
  * @author cy.Y
  * @since 1.0.0
  */
-@Mapper(uses = MapstructConvert.class)
+@Mapper(componentModel = "spring", uses = MapstructConvert.class)
 public interface DashboardInfraConvert {
 
     DashboardInfraConvert INSTANCE = Mappers.getMapper(DashboardInfraConvert.class);

@@ -3,7 +3,7 @@ spring:
     import:
       - "nacos:arch-base.yaml?group=DEFAULT_GROUP&tenant=prod"
   application:
-    name: cyan-employee
+    name: cyan-databi
   cloud:
     nacos:
       # 通用配置（配置中心和注册中心可共享）
@@ -30,4 +30,4 @@ spring:
       password: 123456
 # 数据网关配置
 datagateway:
-  url: http://cyan-datagateway-pre.cyan.com
+  url: http://cyan-datagateway-prod.cyan.com

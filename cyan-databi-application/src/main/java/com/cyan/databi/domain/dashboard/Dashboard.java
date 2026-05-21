@@ -55,6 +55,11 @@ public class Dashboard {
     private String createdBy;
 
     /**
+     * 修改人
+     */
+    private String updatedBy;
+
+    /**
      * 创建时间
      */
     private LocalDateTime createdAt;

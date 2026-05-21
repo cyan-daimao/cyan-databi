@@ -3,7 +3,7 @@ spring:
     import:
       - "nacos:arch-base.yaml?group=DEFAULT_GROUP&tenant=dev"
   application:
-    name: cyan-employee
+    name: cyan-databi
   cloud:
     nacos:
       # 通用配置（配置中心和注册中心可共享）

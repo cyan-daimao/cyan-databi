@@ -1,5 +1,6 @@
 package com.cyan.databi.infra.persistence.dashboard.dos;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
@@ -27,7 +28,7 @@ public class DashboardDO {
     /**
      * 主键
      */
-    @TableId(value = "id")
+    @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
 
     /**
@@ -59,6 +60,12 @@ public class DashboardDO {
      */
     @TableField(value = "created_by")
     private String createdBy;
+
+    /**
+     * 修改人
+     */
+    @TableField(value = "updated_by")
+    private String updatedBy;
 
     /**
      * 创建时间
