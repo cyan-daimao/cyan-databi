@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
  * @author cy.Y
  * @since 1.0.0
  */
-@FeignClient(name = "cyan-databi", path = "/rpc/v1/charts")
+@FeignClient(name = "cyan-databi", contextId = "chartRpcClient", path = "/rpc/v1/charts", url = "${feign.cyan-databi.url:}")
 public interface ChartRpcClient {
 
     /**
